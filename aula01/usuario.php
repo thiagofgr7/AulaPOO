@@ -30,7 +30,7 @@
             }
         }
 
-        public function _construct($nome=null, $idade = null, $email = null){
+        public function __construct($nome=null, $idade = null, $email = null){
             $this->nome = $nome;
             $this->idade = $idade;
             $this->email = $email;
