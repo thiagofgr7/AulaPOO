@@ -23,6 +23,16 @@
             return $this->email;
         }
         public function setEmail($email){
+            if(filter_var($email, FILTER_VALIDATE_EMAIL)){
+                $this->email = $email;
+            }else{
+                echo "<p>Email Inválido {$this->getNome()}</p>";
+            }
+        }
+
+        public function _construct($nome=null, $idade = null, $email = null){
+            $this->nome = $nome;
+            $this->idade = $idade;
             $this->email = $email;
         }
     }
