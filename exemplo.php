@@ -1,20 +1,30 @@
-class Produto {
-    private $nome;
-    private $preco;
+<?php
+class ConstrutorDeConsultas {
+    private $tabela = "usuarios";
 
-    public function __construct($nome, $preco) {
-        $this->nome = $nome;
-        $this->preco = $preco;
-    }
+    // Intercepta métodos inexistentes
+    public function __call($nomeDoMetodo, $argumentos) {
+        // Verifica se a chamada começa com "buscarPor"
+        if (str_starts_with($nomeDoMetodo, 'buscarPor')) {
+            // Extrai o nome do campo (ex: buscarPorNome -> Nome)
+            $campo = strtolower(substr($nomeDoMetodo, 9));
+            $valor = $argumentos[0] ?? null;
 
-    // Define como o objeto será impresso
-    public function __toString() {
-        return "Produto: {$this->nome} - R$ " . number_format($this->preco, 2, ',', '.');
+            return "SELECT * FROM {$this->tabela} WHERE {$campo} = '{$valor}'";
+        }
+
+        throw new Exception("O método {$nomeDoMetodo} não existe.");
     }
 }
 
-$notebook = new Produto("Notebook Dell", 4500.00);
+$consulta = new ConstrutorDeConsultas();
 
-// O PHP invoca __toString() automaticamente aqui
-echo $notebook; 
-// Saída: Produto: Notebook Dell - R$ 4.500,00
+// O método buscarPorEmail não existe, então o __call assume o controle
+echo $consulta->buscarPorEmail("joao@exemplo.com");
+// Saída: SELECT * FROM usuarios WHERE email = 'joao@exemplo.com'
+
+echo "\n";
+
+echo $consulta->buscarPorStatus("ativo");
+// Saída: SELECT * FROM usuarios WHERE status = 'ativo'
+?>
