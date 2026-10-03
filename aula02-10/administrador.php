@@ -7,7 +7,7 @@
         }
 
         public function banirJogador(string $jogador): void{
-            echo "O adm baniu o $jogador\n";
+            echo "<br> O adm baniu o $jogador\n";
         }
 
         public function getCargo(): string{
